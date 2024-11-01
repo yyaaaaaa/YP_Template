@@ -1,4 +1,4 @@
-using VG;
+using YP;
 
 public class HackedAdIcon_Info : Info
 {

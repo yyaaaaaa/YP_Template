@@ -1,5 +1,5 @@
 using UnityEngine;
-using VG;
+using YP;
 
 public class ShowNoAdsOffer_Event : EventHandler
 {

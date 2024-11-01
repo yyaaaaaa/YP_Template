@@ -1,4 +1,4 @@
-using VG;
+using YP;
 using UnityEngine;
 
 public class SkipAds_Button : ButtonHandler
