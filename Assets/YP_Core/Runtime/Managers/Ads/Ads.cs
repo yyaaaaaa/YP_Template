@@ -8,10 +8,10 @@ namespace YP
 {
     public class Ads : Manager
     {
-        private static Ads instance; 
+        private static Ads instance;
 
-        public static bool skipAds 
-        { 
+        public static bool skipAds
+        {
             get => PlayerPrefs.GetInt(nameof(skipAds), 0) == 1;
             set
             {
@@ -37,7 +37,7 @@ namespace YP
             instance = this;
             _currentInterstitialCooldown = interstitialCooldown;
             Log(Core.Message.Initialized(managerName));
-                
+
             StartCoroutine(SubscribeForEnableAds());
         }
 
@@ -55,7 +55,7 @@ namespace YP
 
             public delegate void OnShown(string key_ad, Result result);
             public static event OnShown onShown;
-            
+
 
             public static void Show(string key_ad = "none", bool resetCooldown = false, Action<Result> onShown = null)
             {
@@ -157,7 +157,7 @@ namespace YP
 
         private void OnAdsEnabledChanged()
         {
-            if (Saves.Bool[Key_Save.ads_enabled].Value == false) 
+            if (Saves.Bool[Key_Save.ads_enabled].Value == false)
                 Banner.Set(false);
         }
 
