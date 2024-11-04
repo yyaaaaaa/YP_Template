@@ -1,14 +1,1 @@
-SYMBOLS:
-. ,!:;'#*()?&^$|%=+-№@"~/\<>_[]{}
-
-NUMBERS:
-1234567890
-
-RU:
-АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
-
-EN:
-ABCDEFGHIJKLMNOPQRSTUVWXYZ
-
-TR:
-ÇĞIIIÖŞÜ
+. ,!:;'#*()?&^$|%=+-№@"~/\<>_[]{}1234567890АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZÇĞIIIÖŞÜабвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzçğiiiöşü
