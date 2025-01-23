@@ -36,7 +36,7 @@ namespace YP
         private const string checkUrlTemplate = "https://docs.google.com/spreadsheets/d/*/edit";
         private const string loadUrlTemplate = "https://docs.google.com/spreadsheets/d/*/export?format=csv";
 
-        public string Get(int row, Column column) => _cells[row - 1][(int)column];
+        public string Get(int row, Column column) => _cells[row][(int)column];
 
         public int rows => _cells.Count;
         public int columns => _cells[0].Count;
