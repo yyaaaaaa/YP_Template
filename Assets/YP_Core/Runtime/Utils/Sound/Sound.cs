@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using VG;
 using YP;
 
 public class Sound : MonoBehaviour
@@ -11,6 +12,7 @@ public class Sound : MonoBehaviour
 
     private static Sound instance;
     [SerializeField] private AudioStreamCash audioStreamCash;
+    [SerializeField] private SoundsDictionary sounds;
     [SerializeField] private AudioPlayer _music; public static AudioPlayer music => instance._music;
     [SerializeField] private AudioPlayer _sfx; public static AudioPlayer sfx => instance._sfx;
 
@@ -24,13 +26,15 @@ public class Sound : MonoBehaviour
         while (!instance.audioStreamCash.initialized)
             yield return new WaitForSecondsRealtime(0.2f);
 
-        var clip = instance.audioStreamCash.FindSound(key);
-        instance._music.PlayClip(clip, loop ? AudioPlayer.PlayType.Loop : AudioPlayer.PlayType.Simple);
+        var clip = instance.sounds.FindSound(key);
     }
 
     public static void PlayMusic(string key, bool loop)
     {
-        instance.StartCoroutine(waitCash(key, loop));
+        if (instance._music.audioSource.volume == 0f) return;
+
+        AudioClip clip = instance.sounds.FindSound(key);
+        instance._music.PlayClip(clip, loop ? AudioPlayer.PlayType.Loop : AudioPlayer.PlayType.Simple);
     }
 
     public static void EnableMusic(bool en)
@@ -45,10 +49,12 @@ public class Sound : MonoBehaviour
 
     public static void PlaySFX(string key)
     {
-        AudioClip clip = instance.audioStreamCash.FindSound(key);
         if (instance._sfx.audioSource.volume == 0f) return;
 
-        instance._sfx.audioSource.volume = 0.4f;
+        AudioClip clip = instance.sounds.FindSound(key);
+        
+        //Sound volume controls
+        
         instance._sfx.PlayClip(clip, AudioPlayer.PlayType.OneShot);
     }
 }

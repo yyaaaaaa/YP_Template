@@ -1,15 +1,17 @@
-﻿using NaughtyAttributes;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using NaughtyAttributes;
+using YP;
 
-namespace YP
+namespace VG
 {
     public class AudioStreamCash : Initializable
     {
-        public static bool available => !Environment.editor;
+        public static bool available =>
+            Environment.platform == Environment.Platform.WebGL;
 
         private static Dictionary<string, AudioClip> cashedClips = new Dictionary<string, AudioClip>();
 
@@ -35,8 +37,6 @@ namespace YP
 
             foreach (var clipName in _cashedClipNames)
                 StartCoroutine(LoadClip(clipName));
-
-            InitCompleted();
         }
 
         private IEnumerator LoadClip(string name)
@@ -52,7 +52,7 @@ namespace YP
             cashedClips.Add(name, audioClip);
             _loadedClips++;
 
-            if (_loadedClips == _cashedClipNames.Count) yield break;
+            if (_loadedClips == _cashedClipNames.Count) InitCompleted();
         }
 
         [Button("Load cash names")]
@@ -71,19 +71,6 @@ namespace YP
 
             foreach (var insideDirectory in directory.GetDirectories())
                 SearchFilesInsideDirectory(insideDirectory);
-        }
-
-        public AudioClip FindSound(string key)
-        {
-            key = key.Split(".")[0];
-
-            foreach (var sound in cashedClips)
-            {
-                if (sound.Key == key) return sound.Value;
-            }
-
-            Debug.LogError("No such sound or key");
-            return null;
         }
     }
 }

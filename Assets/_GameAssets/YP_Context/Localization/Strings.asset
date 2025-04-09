@@ -13,10 +13,6 @@ MonoBehaviour:
   m_Name: Strings
   m_EditorClassIdentifier: 
   _translations:
-  - key: level
-    ru: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C"
-    en: Level
-    tr: "\r"
   - key: next
     ru: "\u0414\u0430\u043B\u0435\u0435"
     en: Next
