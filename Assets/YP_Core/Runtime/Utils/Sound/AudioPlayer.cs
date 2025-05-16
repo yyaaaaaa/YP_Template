@@ -18,12 +18,11 @@ namespace YP
             }
         }
 
-        public void PlayClip(AudioClip clip, PlayType playType)
+        public void PlayClip(AudioClip clip, PlayType playType, float volume)
         {
-            if (AudioStreamCash.available)
-                audioSource.clip = AudioStreamCash.GetClip(clip.name);
-            else audioSource.clip = clip;
-
+            audioSource.clip = AudioStreamCash.available ? AudioStreamCash.GetClip(clip.name) : clip;
+            audioSource.volume = volume;
+            
             switch (playType)
             {
                 case PlayType.Simple:
