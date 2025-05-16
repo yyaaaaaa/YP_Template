@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
 
 public class SoundsDictionary : MonoBehaviour
 {
-    [SerializeField] List<SoundElement> sounds = new List<SoundElement>();
+    public static SoundsDictionary instance;
+    public List<SoundElement> sounds = new List<SoundElement>();
     private const string pathToAudioFolder = "_GameAssets/Sounds";
 
-
+    private void Start()
+    {
+        instance = this;
+    }
     [Button]
     public void LoadSounds()
     {
@@ -36,12 +39,16 @@ public class SoundsDictionary : MonoBehaviour
         Debug.Log($"Найдено и добавлено {sounds.Count} аудиофайлов из папки: {folderFullPath}");
 #endif
     }
-    
     public AudioClip FindSound(string key)
     {
         key = key.Split(".")[0];
 
-        return (from sound in sounds where sound.key == key select sound.clip).FirstOrDefault();
+        foreach (var sound in sounds)
+        {
+            if (sound.key == key) return sound.clip;
+        }
+
+        return null;
     }
 
     [Serializable]

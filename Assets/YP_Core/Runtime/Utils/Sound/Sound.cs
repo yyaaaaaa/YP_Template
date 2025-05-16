@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using VG;
 using YP;
@@ -15,7 +16,8 @@ public class Sound : MonoBehaviour
     [SerializeField] private SoundsDictionary sounds;
     [SerializeField] private AudioPlayer _music; public static AudioPlayer music => instance._music;
     [SerializeField] private AudioPlayer _sfx; public static AudioPlayer sfx => instance._sfx;
-
+    private readonly Dictionary<string, int> activeSfx = new(); 
+    
     private static bool musicClipExists => instance != null
                                            && instance._music != null
                                            && instance._music.audioSource != null
@@ -33,8 +35,8 @@ public class Sound : MonoBehaviour
     {
         if (instance._music.audioSource.volume == 0f) return;
 
-        AudioClip clip = instance.sounds.FindSound(key);
-        instance._music.PlayClip(clip, loop ? AudioPlayer.PlayType.Loop : AudioPlayer.PlayType.Simple);
+        AudioClip clip = SoundsDictionary.instance.FindSound(key);
+        instance._music.PlayClip(clip, loop ? AudioPlayer.PlayType.Loop : AudioPlayer.PlayType.Simple, .1f);
     }
 
     public static void EnableMusic(bool en)
@@ -51,10 +53,29 @@ public class Sound : MonoBehaviour
     {
         if (instance._sfx.audioSource.volume == 0f) return;
 
-        AudioClip clip = instance.sounds.FindSound(key);
+        if (instance.activeSfx.TryGetValue(key, out int cnt) && cnt >= 2)
+            return;                                    
+
+        AudioClip clip = SoundsDictionary.instance.FindSound(key);
         
-        //Sound volume controls
-        
-        instance._sfx.PlayClip(clip, AudioPlayer.PlayType.OneShot);
+
+        instance._sfx.PlayClip(clip, AudioPlayer.PlayType.OneShot, .2f);
+
+        if (!instance.activeSfx.ContainsKey(key)) instance.activeSfx[key] = 0;
+        instance.activeSfx[key]++;
+
+        instance.StartCoroutine(instance.ReleaseAfter(clip.length, key));
+    }
+    
+    private IEnumerator ReleaseAfter(float delay, string key)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (activeSfx.TryGetValue(key, out int cnt))
+        {
+            cnt = Mathf.Max(0, cnt - 1);
+            if (cnt == 0) activeSfx.Remove(key);
+            else          activeSfx[key] = cnt;
+        }
     }
 }
